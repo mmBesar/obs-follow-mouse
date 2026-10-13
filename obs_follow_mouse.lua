@@ -26,10 +26,12 @@ obs = obslua
 -- Script configuration values.
 local source_name = ""
 local interval_ms = 50
-local display_width = 2560
-local display_height = 1440
-local output_width = 1080
-local output_height = 1920
+-- Defaults match a single 1920x1080 monitor and a 1920x1080 OBS base canvas.
+-- Change both pairs only when your capture or OBS base canvas differs.
+local display_width = 1920
+local display_height = 1080
+local output_width = 1920
+local output_height = 1080
 local zoom_scale = 1.58125
 local smoothing_factor = 0.1
 
@@ -314,10 +316,10 @@ end
 function script_defaults(settings)
     obs.obs_data_set_default_string(settings, "source_name", "")
     obs.obs_data_set_default_int(settings, "interval_ms", 50)
-    obs.obs_data_set_default_int(settings, "display_width", 2560)
-    obs.obs_data_set_default_int(settings, "display_height", 1440)
-    obs.obs_data_set_default_int(settings, "output_width", 1080)
-    obs.obs_data_set_default_int(settings, "output_height", 1920)
+    obs.obs_data_set_default_int(settings, "display_width", 1920)
+    obs.obs_data_set_default_int(settings, "display_height", 1080)
+    obs.obs_data_set_default_int(settings, "output_width", 1920)
+    obs.obs_data_set_default_int(settings, "output_height", 1080)
     obs.obs_data_set_default_double(settings, "zoom_scale", 1.58125)
     obs.obs_data_set_default_double(settings, "smoothing_factor", 0.1)
     obs.obs_data_set_default_int(settings, "command_mode", 0)

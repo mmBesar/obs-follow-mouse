@@ -1,6 +1,14 @@
 # OBS Follow Mouse
 
-A Lua script for OBS Studio that zooms a captured display and smoothly pans the crop to follow the mouse cursor. It is designed for Linux screen recordings, tutorials, demonstrations, streams, and portrait-format clips.
+[![License](https://img.shields.io/github/license/mmBesar/obs-follow-mouse?label=license)](LICENSE)
+[![Platform: Linux](https://img.shields.io/badge/platform-Linux-FCC624?logo=linux&logoColor=black)]
+[![OBS Studio Lua script](https://img.shields.io/badge/OBS%20Studio-Lua%20script-302E31?logo=obsstudio&logoColor=white)]
+[![Hyprland supported](https://img.shields.io/badge/cursor%20backend-Hyprland%20supported-58E1FF)]
+[![Sway planned](https://img.shields.io/badge/Sway-planned-lightgrey)]
+[![GitHub issues](https://img.shields.io/github/issues/mmBesar/obs-follow-mouse)](https://github.com/mmBesar/obs-follow-mouse/issues)
+[![GitHub stars](https://img.shields.io/github/stars/mmBesar/obs-follow-mouse?style=flat)](https://github.com/mmBesar/obs-follow-mouse/stargazers)
+
+A Lua script for OBS Studio that zooms a captured display and smoothly pans the crop to follow the mouse cursor. It is designed for Linux screen recordings, tutorials, demonstrations, and streams, with configurable dimensions for landscape or portrait canvases.
 
 **Current status:** the implemented cursor provider supports **Hyprland** via `hyprctl cursorpos`. The project name is compositor-neutral so other providers (for example, Sway) can be added later. Sway and other compositors are **not supported yet**.
 
@@ -35,6 +43,24 @@ The script queries the cursor position independently of the capture API. Your OB
 3. Click **+** and select `obs_follow_mouse.lua`.
 4. Select the script in the list and configure the source name, dimensions, monitor origin, and command mode.
 5. Move the cursor onto the captured monitor and confirm the crop follows it in the preview.
+
+### Updating an existing installation
+
+OBS saves script settings separately from the Lua file. Replacing the script does **not** necessarily reset settings saved by an older version. After updating, select the script in **Tools → Scripts** and verify all four dimension fields below. For a standard 1920×1080 setup, set both pairs to `1920` / `1080`, then apply the settings. If you previously used portrait dimensions, do not assume the new defaults have replaced those saved values.
+
+For troubleshooting, temporarily disable or unload any older copy of the mouse-follow script before enabling this one. Only one script should control a given source item at a time.
+
+### Default dimensions
+
+The script defaults to a **1920×1080 captured monitor and a 1920×1080 OBS base canvas**. Both dimension pairs match your normal 16:9 setup:
+
+| Setting | Default |
+| --- | ---: |
+| Captured Source Width / Height | `1920` / `1080` |
+| Crop / Canvas Width / Height | `1920` / `1080` |
+| Zoom Scale | `1.58125` |
+
+The captured-source dimensions must match the selected monitor's capture resolution. The crop/canvas dimensions must match your OBS **Base (Canvas) Resolution** (not necessarily Output (Scaled) Resolution). If your OBS base canvas is a different size or aspect ratio, change the crop/canvas pair accordingly.
 
 The configured **OBS Source Name** must match a **top-level item in the currently active scene**. This script changes that scene item's bounds and position. If you need an unaffected view of the same capture, duplicate the source or create a separate scene layout.
 
@@ -145,7 +171,7 @@ zoom_scale >= max(crop_width / source_width,
                   crop_height / source_height)
 ```
 
-For a 1920×1080 source and a 1080×1920 portrait canvas, the minimum is about `1.778`. A lower scale can leave the canvas partly uncovered. The script logs a warning when your configured scale may be too small.
+With the default 1920×1080 source and 1920×1080 canvas, the minimum scale is `1.0`; the default `1.58125` zooms in and allows the crop to pan in both directions. For an intentionally portrait 1080×1920 canvas, set **Crop / Canvas Width / Height** to `1080` / `1920`; with a 1920×1080 source, that portrait layout needs a scale of at least about `1.778` to fill the canvas. Do not use portrait dimensions unless your OBS base canvas really is portrait. A scale below the calculated minimum can leave the canvas partly uncovered. The script logs a warning when your configured scale may be too small.
 
 ## Troubleshooting
 
@@ -169,7 +195,7 @@ The source name is case-sensitive and must match a top-level item in the current
 
 ### The zoomed source does not fill the canvas
 
-Ensure the crop dimensions match the OBS base-canvas coordinates used by the scene transform, and set the zoom to at least the minimum described above.
+Ensure **Crop / Canvas Width / Height** match OBS **Settings → Video → Base (Canvas) Resolution**. The default is `1920×1080`; use `1080×1920` only if your base canvas is actually portrait. Then set the zoom to at least the minimum described above.
 
 ## Current limitations and roadmap
 
