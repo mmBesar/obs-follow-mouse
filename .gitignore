@@ -1,0 +1,10 @@
+# Editor and operating-system artifacts
+*~
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Local test output
+*.log
+*.luac
